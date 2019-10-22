@@ -16,7 +16,14 @@ public class GreetingServiceTest {
 
     @Test
     public void getMessage() throws Exception {
-        assertThat(greetingService.getMessage()).isEqualTo("Hello");
+        assertThat(greetingService.getMessage(null))
+                .isEqualTo("Hello");
+    }
+
+    @Test
+    public void getMessageWithName() throws Exception {
+        assertThat(greetingService.getMessage("JOKER"))
+                .isEqualTo("Hello, JOKER");
     }
 
 }
