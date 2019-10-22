@@ -1,7 +1,7 @@
 package com.dallab.cattoy.controller;
 
 import com.dallab.cattoy.application.GreetingService;
-import com.dallab.cattoy.dto.Greeting;
+import com.dallab.cattoy.dto.GreetingDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,14 +14,14 @@ public class GreetingController {
     private GreetingService greeingService;
 
     @GetMapping("/hello")
-    public Greeting hello(
-            @RequestParam(required=false) String name
+    public GreetingDto hello(
+            @RequestParam(required = false) String name
     ) {
-        Greeting greeting = new Greeting();
-        greeting.setName("Ashal");
-        greeting.setMessage(greeingService.getMessage(name));
+        GreetingDto greetingDto = new GreetingDto();
+        greetingDto.setName("Ashal");
+        greetingDto.setMessage(greeingService.getMessage(name));
 
-        return greeting;
+        return greetingDto;
     }
 
 }
