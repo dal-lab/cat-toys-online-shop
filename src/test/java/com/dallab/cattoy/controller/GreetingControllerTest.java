@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +39,8 @@ public class GreetingControllerTest {
         mockMvc.perform(get("/hello"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello")));
+
+        verify(greetingService).getMessage(null);
     }
 
     @Test
@@ -45,6 +48,8 @@ public class GreetingControllerTest {
         mockMvc.perform(get("/hello").param("name", "JOKER"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Hello, JOKER")));
+
+        verify(greetingService).getMessage("JOKER");
     }
 
 }
