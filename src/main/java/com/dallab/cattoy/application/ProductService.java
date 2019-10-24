@@ -4,9 +4,11 @@ import com.dallab.cattoy.domain.Product;
 import com.dallab.cattoy.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
 
     private ProductRepository productRepository;

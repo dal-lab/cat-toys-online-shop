@@ -1,17 +1,13 @@
 package com.dallab.cattoy.domain;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-@Repository
-public class ProductRepository {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    public List<Product> findAll() {
-        return null;
-    }
+    List<Product> findAll();
 
-    public void save(Product product) {
-    }
+    Product save(Product product);
 
 }
