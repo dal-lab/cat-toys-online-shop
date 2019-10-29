@@ -35,6 +35,11 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<?> create() throws URISyntaxException {
+        String name = "낚시대";
+        String maker = "달랩";
+        Integer price = 5000;
+        productService.addProduct(name, maker, price);
+
         URI location = new URI("/products/1004");
         return ResponseEntity.created(location).build();
     }
