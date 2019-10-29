@@ -38,11 +38,10 @@ public class ProductController {
     public ResponseEntity<?> create(
             @RequestBody ProductDto productDto
     ) throws URISyntaxException {
-        Product product = mapper.map(productDto, Product.class);
+        Product product = productService.addProduct(
+                mapper.map(productDto, Product.class));
 
-        productService.addProduct(product);
-
-        URI location = new URI("/products/1004");
+        URI location = new URI("/products/" + product.getId());
         return ResponseEntity.created(location).build();
     }
 

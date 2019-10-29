@@ -9,8 +9,10 @@ public class ProductDto {
     @Mapping("name")
     private String name;
 
+    @Mapping("maker")
     private String maker;
 
+    @Mapping("price")
     private Integer price;
 
 }
