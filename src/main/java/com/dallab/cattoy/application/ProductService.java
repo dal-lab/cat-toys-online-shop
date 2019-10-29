@@ -21,9 +21,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void addProduct(String name) {
-        Product product = Product.builder().name(name).build();
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
+    }
 
-        productRepository.save(product);
+    public void removeProduct(Long id) {
+        // TODO: delete it!
     }
 }

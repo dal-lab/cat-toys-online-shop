@@ -50,7 +50,13 @@ public class ProductServiceTest {
 
     @Test
     public void addProduct() {
-        productService.addProduct("쥐돌이");
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(5000)
+                .build();
+
+        productService.addProduct(product);
 
         verify(productRepository).save(any());
     }
