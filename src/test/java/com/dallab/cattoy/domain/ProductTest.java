@@ -1,5 +1,8 @@
 package com.dallab.cattoy.domain;
 
+import com.dallab.cattoy.dto.ProductDto;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,6 +40,18 @@ public class ProductTest {
         product.changeImageUrl(imageUrl);
 
         assertThat(product.getImageUrl()).isEqualTo(imageUrl);
+    }
+
+    @Test
+    public void mapFromDTO() {
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+
+        ProductDto productDto = new ProductDto();
+        productDto.setName("쥐돌이");
+
+        Product product = mapper.map(productDto, Product.class);
+
+        assertThat(product.getName()).isEqualTo("쥐돌이");
     }
 
 }
