@@ -21,8 +21,12 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void addProduct(String name) {
-        Product product = Product.builder().name(name).build();
+    public void addProduct(String name, String maker, Integer price) {
+        Product product = Product.builder()
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .build();
 
         productRepository.save(product);
     }

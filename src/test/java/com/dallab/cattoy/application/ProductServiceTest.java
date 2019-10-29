@@ -50,7 +50,7 @@ public class ProductServiceTest {
 
     @Test
     public void addProduct() {
-        productService.addProduct("쥐돌이");
+        productService.addProduct("쥐돌이", "달랩", 4990);
 
         verify(productRepository).save(any());
     }
