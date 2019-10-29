@@ -38,11 +38,9 @@ public class ProductController {
     public ResponseEntity<?> create(
             @RequestBody ProductDto productDto
     ) throws URISyntaxException {
-        String name = productDto.getName();
-        String maker = productDto.getMaker();
-        Integer price = productDto.getPrice();
+        Product product = mapper.map(productDto, Product.class);
 
-        productService.addProduct(name, maker, price);
+        productService.addProduct(product);
 
         URI location = new URI("/products/1004");
         return ResponseEntity.created(location).build();
