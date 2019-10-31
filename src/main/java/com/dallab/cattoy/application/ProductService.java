@@ -2,6 +2,7 @@ package com.dallab.cattoy.application;
 
 import com.dallab.cattoy.domain.Product;
 import com.dallab.cattoy.domain.ProductRepository;
+import com.dallab.cattoy.dto.ProductDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,11 +22,24 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public Product getProduct(Long id) {
+        return productRepository.findById(id).get();
+    }
+
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
-    public void removeProduct(Long id) {
-        // TODO: delete it!
+    public Product updateProduct(Long id, ProductDto productDto) {
+        Product product = productRepository.findById(id).get();
+
+        product.changeWithDto(productDto);
+
+        return product;
     }
+
+    public void removeProduct(Long id) {
+        productRepository.deleteById(id);
+    }
+
 }

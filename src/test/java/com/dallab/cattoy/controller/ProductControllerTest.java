@@ -2,6 +2,7 @@ package com.dallab.cattoy.controller;
 
 import com.dallab.cattoy.application.ProductService;
 import com.dallab.cattoy.domain.Product;
+import com.dallab.cattoy.dto.ProductDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,35 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void create() throws Exception {
+    public void detailWhenProductExists() throws Exception {
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(5000)
+                .build();
+
+        given(productService.getProduct(13L)).willReturn(product);
+
+        mockMvc.perform(get("/products/13"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("쥐돌이")));
+
+        verify(productService).getProduct(13L);
+    }
+
+    @Test
+    public void detailWhenProductNotExists() throws Exception {
+        given(productService.getProduct(13L))
+                .willThrow(new EntityNotFoundException());
+
+        mockMvc.perform(get("/products/13"))
+                .andExpect(status().isNotFound());
+
+        verify(productService).getProduct(13L);
+    }
+
+    @Test
+    public void createWithValidAttributes() throws Exception {
         Product product = Product.builder().id(13L).build();
 
         given(productService.addProduct(any())).willReturn(product);
@@ -67,6 +97,58 @@ public class ProductControllerTest {
                 .andExpect(header().string("location", "/products/13"));
 
         verify(productService).addProduct(any(Product.class));
+    }
+
+    @Test
+    public void createWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"\",\"maker\":\"\"," +
+                                "\"price\":1000}")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateWithValidAttributes() throws Exception {
+        mockMvc.perform(
+                patch("/products/13")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"낚시대\",\"maker\":\"달랩\"," +
+                                "\"price\":5000}")
+        )
+                .andExpect(status().isOk());
+
+        ProductDto productDto = ProductDto.builder()
+                .name("낚시대")
+                .maker("달랩")
+                .price(5000)
+                .build();
+
+        verify(productService).updateProduct(13L, productDto);
+    }
+
+    @Test
+    public void updateWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                patch("/products/13")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"   \",\"maker\":\"\"," +
+                                "\"price\":5000}")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateWithInvalidPrice() throws Exception {
+        mockMvc.perform(
+                patch("/products/13")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"낚시대\",\"maker\":\"\"," +
+                                "\"price\":-5000}")
+        )
+                .andExpect(status().isBadRequest());
     }
 
     @Test

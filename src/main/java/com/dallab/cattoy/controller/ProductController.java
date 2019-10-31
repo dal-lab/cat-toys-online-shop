@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequestMapping("/products")
 @RestController
 public class ProductController {
 
@@ -22,7 +24,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products")
+    @GetMapping
     public List<ProductDto> list() {
         List<Product> products = productService.getProducts();
 
@@ -31,9 +33,18 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/products")
+    @GetMapping("/{id}")
+    public ProductDto detail(
+            @PathVariable("id") Long id
+    ) {
+        Product product = productService.getProduct(id);
+
+        return mapper.map(product, ProductDto.class);
+    }
+
+    @PostMapping
     public ResponseEntity<?> create(
-            @RequestBody ProductDto productDto
+            @Valid @RequestBody ProductDto productDto
     ) throws URISyntaxException {
         Product product = productService.addProduct(
                 mapper.map(productDto, Product.class));
@@ -42,7 +53,15 @@ public class ProductController {
         return ResponseEntity.created(location).build();
     }
 
-    @DeleteMapping("/products/{id}")
+    @PatchMapping("/{id}")
+    public void update(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody ProductDto productDto
+    ) {
+        productService.updateProduct(id, productDto);
+    }
+
+    @DeleteMapping("/{id}")
     public void destroy(
             @PathVariable("id") Long id
     ) {
