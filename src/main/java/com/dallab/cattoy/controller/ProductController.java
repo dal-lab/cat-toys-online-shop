@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequestMapping("/products")
 @RestController
 public class ProductController {
 
@@ -22,7 +23,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products")
+    @GetMapping
     public List<ProductDto> list() {
         List<Product> products = productService.getProducts();
 
@@ -31,7 +32,7 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     public ProductDto detail(
             @PathVariable("id") Long id
     ) {
@@ -40,7 +41,7 @@ public class ProductController {
         return mapper.map(product, ProductDto.class);
     }
 
-    @PostMapping("/products")
+    @PostMapping
     public ResponseEntity<?> create(
             @RequestBody ProductDto productDto
     ) throws URISyntaxException {
@@ -51,7 +52,7 @@ public class ProductController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/products/{id}")
+    @PatchMapping("/{id}")
     public void update(
             @PathVariable("id") Long id,
             @RequestBody ProductDto productDto
@@ -59,7 +60,7 @@ public class ProductController {
         productService.updateProduct(id, productDto);
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public void destroy(
             @PathVariable("id") Long id
     ) {
