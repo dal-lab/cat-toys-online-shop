@@ -51,6 +51,14 @@ public class ProductController {
         return ResponseEntity.created(location).build();
     }
 
+    @PatchMapping("/products/{id}")
+    public void update(
+            @PathVariable("id") Long id,
+            @RequestBody ProductDto productDto
+    ) {
+        productService.updateProduct(id, productDto);
+    }
+
     @DeleteMapping("/products/{id}")
     public void destroy(
             @PathVariable("id") Long id

@@ -46,8 +46,9 @@ public class ProductTest {
     public void mapFromDTO() {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
-        ProductDto productDto = new ProductDto();
-        productDto.setName("쥐돌이");
+        ProductDto productDto = ProductDto.builder()
+                .name("쥐돌이")
+                .build();
 
         Product product = mapper.map(productDto, Product.class);
 
