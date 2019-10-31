@@ -52,6 +52,23 @@ public class ProductControllerTest {
     }
 
     @Test
+    public void detail() throws Exception {
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(5000)
+                .build();
+
+        given(productService.getProduct(13L)).willReturn(product);
+
+        mockMvc.perform(get("/products/13"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("쥐돌이")));
+
+        verify(productService).getProduct(13L);
+    }
+
+    @Test
     public void create() throws Exception {
         Product product = Product.builder().id(13L).build();
 

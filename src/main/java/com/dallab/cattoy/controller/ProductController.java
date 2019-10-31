@@ -31,6 +31,15 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/products/{id}")
+    public ProductDto detail(
+            @PathVariable("id") Long id
+    ) {
+        Product product = productService.getProduct(id);
+
+        return mapper.map(product, ProductDto.class);
+    }
+
     @PostMapping("/products")
     public ResponseEntity<?> create(
             @RequestBody ProductDto productDto

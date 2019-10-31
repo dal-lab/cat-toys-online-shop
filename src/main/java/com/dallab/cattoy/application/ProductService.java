@@ -21,6 +21,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public Product getProduct(Long id) {
+        // TODO:
+        return null;
+    }
+
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
