@@ -26,6 +26,6 @@ public class ProductService {
     }
 
     public void removeProduct(Long id) {
-        // TODO: delete it!
+        productRepository.deleteById(id);
     }
 }
