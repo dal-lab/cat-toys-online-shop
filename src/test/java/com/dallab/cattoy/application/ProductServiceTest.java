@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +47,22 @@ public class ProductServiceTest {
         given(productRepository.findAll()).willReturn(products);
 
         assertThat(productService.getProducts()).isNotEmpty();
+    }
+
+    @Test
+    public void getProduct() {
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(5000)
+                .build();
+
+        given(productRepository.findById(13L))
+                .willReturn(Optional.of(product));
+
+        assertThat(productService.getProduct(13L)).isEqualTo(product);
+
+        verify(productRepository).findById(13L);
     }
 
     @Test

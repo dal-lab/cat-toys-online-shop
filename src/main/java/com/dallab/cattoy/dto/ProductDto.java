@@ -6,6 +6,9 @@ import lombok.Data;
 @Data
 public class ProductDto {
 
+    @Mapping("id")
+    private Long id;
+
     @Mapping("name")
     private String name;
 
