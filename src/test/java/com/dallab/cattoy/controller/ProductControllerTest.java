@@ -14,12 +14,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -54,7 +54,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void detail() throws Exception {
+    public void detailWhenProductExists() throws Exception {
         Product product = Product.builder()
                 .name("쥐돌이")
                 .maker("달랩")
@@ -66,6 +66,17 @@ public class ProductControllerTest {
         mockMvc.perform(get("/products/13"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("쥐돌이")));
+
+        verify(productService).getProduct(13L);
+    }
+
+    @Test
+    public void detailWhenProductNotExists() throws Exception {
+        given(productService.getProduct(13L))
+                .willThrow(new EntityNotFoundException());
+
+        mockMvc.perform(get("/products/13"))
+                .andExpect(status().isNotFound());
 
         verify(productService).getProduct(13L);
     }
