@@ -1,6 +1,5 @@
 package com.dallab.cattoy.util;
 
-
 import io.jsonwebtoken.Claims;
 import org.junit.Before;
 import org.junit.Test;
