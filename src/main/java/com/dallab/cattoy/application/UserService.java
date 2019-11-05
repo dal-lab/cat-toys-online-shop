@@ -3,7 +3,9 @@ package com.dallab.cattoy.application;
 import com.dallab.cattoy.domain.User;
 import com.dallab.cattoy.domain.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
