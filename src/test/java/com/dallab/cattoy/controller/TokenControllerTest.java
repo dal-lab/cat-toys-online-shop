@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +35,8 @@ public class TokenControllerTest {
                                 "\"password\":\"pass\"}")
         )
                 .andExpect(status().isCreated());
+
+        verify(userService).authenticate("tester@example.com", "pass");
     }
 
 }
