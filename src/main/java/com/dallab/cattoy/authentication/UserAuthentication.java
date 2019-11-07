@@ -2,6 +2,11 @@ package com.dallab.cattoy.authentication;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // 커스텀 인증 객체.
 public class UserAuthentication extends AbstractAuthenticationToken {
@@ -9,8 +14,21 @@ public class UserAuthentication extends AbstractAuthenticationToken {
     private Claims claims;
 
     public UserAuthentication(Claims claims) {
-        super(null);
+        super(authorities(claims));
         this.claims = claims;
+    }
+
+    private static List<GrantedAuthority> authorities(Claims claims) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("USER"));
+
+        // FIXME: 사용자 ID가 1이면 관리자 권한 부여.
+        Long userId = claims.get("userId", Long.class);
+        if (userId == 1L) {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        }
+
+        return authorities;
     }
 
     @Override
