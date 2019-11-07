@@ -30,7 +30,9 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException());
 
-        // TODO:
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return null;
+        }
 
         return user;
     }

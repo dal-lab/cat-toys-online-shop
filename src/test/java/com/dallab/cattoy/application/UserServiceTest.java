@@ -35,6 +35,18 @@ public class UserServiceTest {
         userService = new UserService(userRepository, passwordEncoder);
     }
 
+    @Before
+    public void mockUserRepository() {
+        User user = User.builder()
+                .name("테스터")
+                .email("tester@example.com")
+                .password(passwordEncoder.encode("pass"))
+                .build();
+
+        given(userRepository.findByEmail("tester@example.com"))
+                .willReturn(Optional.of(user));
+    }
+
     @Test
     public void register() {
         User user = User.builder()
@@ -52,15 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void authenticateWithValidAttributes() {
-        User mockUser = User.builder()
-                .name("테스터")
-                .email("tester@example.com")
-                .build();
-
-        given(userRepository.findByEmail("tester@example.com"))
-                .willReturn(Optional.of(mockUser));
-
-        User user = userService.authenticate("tester@example.com", "password");
+        User user = userService.authenticate("tester@example.com", "pass");
 
         assertThat(user).isNotNull();
     }
@@ -71,6 +75,13 @@ public class UserServiceTest {
                 .willThrow(new EntityNotFoundException());
 
         userService.authenticate("x@example.com", "x");
+    }
+
+    @Test
+    public void authenticateWithWrongPassword() {
+        User user = userService.authenticate("tester@example.com", "x");
+
+        assertThat(user).isNull();
     }
 
 }
