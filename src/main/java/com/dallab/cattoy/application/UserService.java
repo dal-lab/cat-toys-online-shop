@@ -5,6 +5,8 @@ import com.dallab.cattoy.domain.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -24,4 +26,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return null;
+        }
+
+        return user;
+    }
 }

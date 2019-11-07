@@ -23,6 +23,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class GreetingControllerTest {
 
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
+            "eyJ1c2VySWQiOjEzLCJuYW1lIjoi7YWM7Iqk7YSwIn0." +
+            "yI3hxmFPMg4tbbxsUh11AzwfgbfxW_jrUaqFuzPTS64";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,6 +56,21 @@ public class GreetingControllerTest {
                 .andExpect(content().string(containsString("Hello, JOKER")));
 
         verify(greetingService).getMessage("JOKER");
+    }
+
+    @Test
+    public void helloWithJWT() throws Exception {
+        mockMvc.perform(
+                get("/hello")
+                        .header("Authorization", "Bearer " + TOKEN)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"name\":\"테스터\"")
+                ))
+                .andExpect(content().string(containsString("Hello")));
+
+        verify(greetingService).getMessage(null);
     }
 
 }

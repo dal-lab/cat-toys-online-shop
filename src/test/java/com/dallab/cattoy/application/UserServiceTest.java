@@ -10,7 +10,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 public class UserServiceTest {
@@ -31,6 +35,18 @@ public class UserServiceTest {
         userService = new UserService(userRepository, passwordEncoder);
     }
 
+    @Before
+    public void mockUserRepository() {
+        User user = User.builder()
+                .name("테스터")
+                .email("tester@example.com")
+                .password(passwordEncoder.encode("pass"))
+                .build();
+
+        given(userRepository.findByEmail("tester@example.com"))
+                .willReturn(Optional.of(user));
+    }
+
     @Test
     public void register() {
         User user = User.builder()
@@ -44,6 +60,28 @@ public class UserServiceTest {
         assertThat(user.getPassword()).isNotEqualTo("pass");
 
         verify(userRepository).save(user);
+    }
+
+    @Test
+    public void authenticateWithValidAttributes() {
+        User user = userService.authenticate("tester@example.com", "pass");
+
+        assertThat(user).isNotNull();
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void authenticateWithNotExistedEmail() {
+        given(userRepository.findByEmail("x@example.com"))
+                .willThrow(new EntityNotFoundException());
+
+        userService.authenticate("x@example.com", "x");
+    }
+
+    @Test
+    public void authenticateWithWrongPassword() {
+        User user = userService.authenticate("tester@example.com", "x");
+
+        assertThat(user).isNull();
     }
 
 }

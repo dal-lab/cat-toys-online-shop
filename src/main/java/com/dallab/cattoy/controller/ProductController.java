@@ -6,6 +6,7 @@ import com.dallab.cattoy.dto.ProductDto;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RequestMapping("/products")
 @RestController
 public class ProductController {
@@ -42,6 +44,8 @@ public class ProductController {
         return mapper.map(product, ProductDto.class);
     }
 
+    // 인증된 사용자 & 관리자만 접근 가능
+    @PreAuthorize("isAuthenticated() and hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(
             @Valid @RequestBody ProductDto productDto
