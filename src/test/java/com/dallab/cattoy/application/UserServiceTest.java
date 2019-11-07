@@ -10,7 +10,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 public class UserServiceTest {
@@ -44,6 +48,29 @@ public class UserServiceTest {
         assertThat(user.getPassword()).isNotEqualTo("pass");
 
         verify(userRepository).save(user);
+    }
+
+    @Test
+    public void authenticateWithValidAttributes() {
+        User mockUser = User.builder()
+                .name("테스터")
+                .email("tester@example.com")
+                .build();
+
+        given(userRepository.findByEmail("tester@example.com"))
+                .willReturn(Optional.of(mockUser));
+
+        User user = userService.authenticate("tester@example.com", "password");
+
+        assertThat(user).isNotNull();
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void authenticateWithNotExistedEmail() {
+        given(userRepository.findByEmail("x@example.com"))
+                .willThrow(new EntityNotFoundException());
+
+        userService.authenticate("x@example.com", "x");
     }
 
 }
