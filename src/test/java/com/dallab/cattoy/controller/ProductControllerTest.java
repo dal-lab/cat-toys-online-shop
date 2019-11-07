@@ -30,6 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class ProductControllerTest {
 
+    private static final String TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
+            "eyJ1c2VySWQiOjEzLCJuYW1lIjoi7YWM7Iqk7YSwIn0." +
+            "yI3hxmFPMg4tbbxsUh11AzwfgbfxW_jrUaqFuzPTS64";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -82,6 +86,17 @@ public class ProductControllerTest {
     }
 
     @Test
+    public void createWithoutAuthentication() throws Exception {
+        mockMvc.perform(
+                post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"낚시대\",\"maker\":\"달랩\"," +
+                                "\"price\":5000}")
+        )
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void createWithValidAttributes() throws Exception {
         Product product = Product.builder().id(13L).build();
 
@@ -89,6 +104,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(
                 post("/products")
+                        .header("Authorization", "Bearer " + TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"낚시대\",\"maker\":\"달랩\"," +
                                 "\"price\":5000}")
@@ -103,6 +119,7 @@ public class ProductControllerTest {
     public void createWithInvalidAttributes() throws Exception {
         mockMvc.perform(
                 post("/products")
+                        .header("Authorization", "Bearer " + TOKEN)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
                                 "\"price\":1000}")
