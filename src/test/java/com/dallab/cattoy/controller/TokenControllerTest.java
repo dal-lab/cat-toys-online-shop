@@ -13,9 +13,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -51,7 +53,9 @@ public class TokenControllerTest {
                         .content("{\"email\":\"tester@example.com\"," +
                                 "\"password\":\"pass\"}")
         )
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(content().string(containsString("accessToken")))
+                .andExpect(content().string(containsString(".")));
 
         verify(userService).authenticate("tester@example.com", "pass");
     }
