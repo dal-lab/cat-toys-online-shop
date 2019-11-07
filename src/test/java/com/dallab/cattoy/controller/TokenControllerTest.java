@@ -1,6 +1,8 @@
 package com.dallab.cattoy.controller;
 
 import com.dallab.cattoy.application.UserService;
+import com.dallab.cattoy.domain.User;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,8 +29,22 @@ public class TokenControllerTest {
     @MockBean
     private UserService userService;
 
+    @Before
+    public void setUp() {
+        User user = User.builder()
+                .name("테스터")
+                .email("tester@example.com")
+                .build();
+
+        given(userService.authenticate("tester@example.com", "pass"))
+                .willReturn(user);
+
+        given(userService.authenticate("x@example.com", "x"))
+                .willReturn(null);
+    }
+
     @Test
-    public void signin() throws Exception {
+    public void signinWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/token")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -37,6 +54,19 @@ public class TokenControllerTest {
                 .andExpect(status().isCreated());
 
         verify(userService).authenticate("tester@example.com", "pass");
+    }
+
+    @Test
+    public void signinWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                post("/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"x@example.com\"," +
+                                "\"password\":\"x\"}")
+        )
+                .andExpect(status().isNotFound());
+
+        verify(userService).authenticate("x@example.com", "x");
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -28,6 +29,9 @@ public class TokenController {
         String password = signinDto.getPassword();
 
         User user = userService.authenticate(email, password);
+        if (user == null) {
+            throw new EntityNotFoundException();
+        }
 
         return ResponseEntity.created(new URI("/")).build();
     }
