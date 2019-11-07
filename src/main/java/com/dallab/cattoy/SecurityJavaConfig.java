@@ -1,5 +1,6 @@
 package com.dallab.cattoy;
 
+import com.dallab.cattoy.authentication.JwtAuthenticationFilter;
 import com.dallab.cattoy.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.Filter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
@@ -20,12 +23,17 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // 사용자 인증을 위한 필터.
+        Filter filter = new JwtAuthenticationFilter(
+                authenticationManager(), jwtUtil());
+
         http
                 .cors().disable()
                 .csrf().disable()
                 .formLogin().disable()
                 .headers().frameOptions().disable()
                 .and()
+                .addFilter(filter)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
