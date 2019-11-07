@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -23,7 +24,7 @@ public class TokenController {
 
     @PostMapping
     public ResponseEntity<?> signin(
-            @RequestBody SigninDto signinDto
+            @Valid @RequestBody SigninDto signinDto
     ) throws URISyntaxException {
         String email = signinDto.getEmail();
         String password = signinDto.getPassword();

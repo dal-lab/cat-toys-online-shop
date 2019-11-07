@@ -69,4 +69,14 @@ public class TokenControllerTest {
         verify(userService).authenticate("x@example.com", "x");
     }
 
+    @Test
+    public void signinWithNoPassword() throws Exception {
+        mockMvc.perform(
+                post("/token")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
 }
