@@ -3,7 +3,6 @@ package com.dallab.cattoy.authentication;
 import com.dallab.cattoy.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,9 +61,7 @@ public class JwtAuthenticationFilter
         Claims claims = jwtUtil.parseToken(token);
 
         // 인증 객체를 만듭니다.
-        // 여기선 일단 기존 구현체를 활용합니다.
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(claims, null);
+        Authentication authentication = new UserAuthentication(claims);
 
         return authentication;
     }
