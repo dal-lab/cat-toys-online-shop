@@ -29,4 +29,7 @@ public class ProductDto {
     @Mapping("price")
     private Integer price;
 
+    @Mapping("imageUrl")
+    private String imageUrl;
+
 }

@@ -3,28 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <title>고양이 장난감의 모든 것!</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
   </head>
   <body>
     <div id="app">
       <p>Welcome!</p>
     </div>
-    <script src="node_modules/axios/dist/axios.js"></script>
-    <script>
-      async function main() {
-        const { data: products } = await axios.get('http://localhost:8080/products');
-        const element = document.getElementById('app');
-        element.innerHTML = `
-          ${products.map(product => `
-            <div>
-              [${product.maker}]
-              ${product.name}
-              /
-              ${product.price}원
-            </div>
-          `).join('')}
-        `;
-      }
-      main();
-    </script>
+    <script src="main.js"></script>
   </body>
 </html>
