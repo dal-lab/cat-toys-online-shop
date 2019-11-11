@@ -38,6 +38,12 @@ public class ProductControllerTest {
             "eyJ1c2VySWQiOjEsIm5hbWUiOiLqtIDrpqzsnpAifQ." +
             "EyrTP4OAGH9fA7lYxHrmJibf9QpBZnijtet-bWiTu2k";
 
+    // 다른 key값으로 다른 시스템에서 만들어진 토
+    private static final String INVALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
+            "eyJjb21wYW55TmFtZSI6ImF1dG9ldmVyIiwic3lzdGVtTmFtZSI6InVzZWR" +
+            "DYXIiLCJjcmVhdGVkQXQiOiIyMDE5LTEwLTI1IiwiZXhwaXJlQXQiOiIyMDIwLTEwLTI1In0" +
+            ".-PZ-MY4EE1uJ6YJbjeVW4yXF4rRZ1U6NTPx9BdLCkhU";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -110,6 +116,20 @@ public class ProductControllerTest {
                                 "\"price\":5000}")
         )
                 .andExpect(status().isForbidden());
+    }
+
+    // io.jsonwebtoken.security.SignatureException 발생
+    // advice에 등록된 상태
+    @Test
+    public void createWithInvalidToken() throws Exception {
+        mockMvc.perform(
+                post("/products")
+                        .header("Authorization", "Bearer " + INVALID_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"낚시대\",\"maker\":\"달랩\"," +
+                                "\"price\":5000}")
+        )
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
