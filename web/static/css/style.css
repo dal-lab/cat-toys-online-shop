@@ -1,0 +1,14 @@
+.products {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product {
+  margin: 5px;
+  text-align: center;
+}
+
+.product img {
+  display: block;
+  width: 200px;
+}

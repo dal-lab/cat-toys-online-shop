@@ -16,15 +16,16 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <div class="products">
       {products.map(product =>
-        <div key={product.id}>
+        <div class="product" key={product.id}>
+          <img src={product.imageUrl} alt="제품 이미지" />
           [{product.maker}]
           {product.name}
           /
           {product.price}원
         </div>
       )}
-    </>
+    </div>
   );
 }
