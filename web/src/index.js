@@ -1,18 +1,6 @@
-import axios from 'axios';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-async function main() {
-  const { data: products } = await axios.get('http://localhost:8080/products');
-  const element = document.getElementById('app');
-  element.innerHTML = `
-    ${products.map(product => `
-      <div>
-        [${product.maker}]
-        ${product.name}
-        /
-        ${product.price}원
-      </div>
-    `).join('')}
-  `;
-}
+import App from './App';
 
-main();
+ReactDOM.render(<App />, document.getElementById('app'));
