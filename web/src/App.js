@@ -16,9 +16,9 @@ export default function App() {
   }, []);
 
   return (
-    <div class="products">
+    <div className="products">
       {products.map(product =>
-        <div class="product" key={product.id}>
+        <div className="product" key={product.id}>
           <img src={product.imageUrl} alt="제품 이미지" />
           [{product.maker}]
           {product.name}
