@@ -1,4 +1,4 @@
-package com.dallab.cattoy.dto;
+package com.dallab.cattoys.dto;
 
 import lombok.Data;
 
@@ -6,6 +6,7 @@ import lombok.Data;
 public class GreetingDto {
 
     private String name;
+
     private String message;
 
 }
