@@ -25,7 +25,7 @@ public class TokenController {
     private UserService userService;
 
     @Autowired
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @PostMapping
     public ResponseEntity<?> signin(
