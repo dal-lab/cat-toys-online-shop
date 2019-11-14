@@ -1,12 +1,12 @@
 package com.dallab.cattoy.controller;
 
 import com.dallab.cattoy.application.ProductService;
+import com.dallab.cattoy.authentication.AuthorizeRequired;
 import com.dallab.cattoy.domain.Product;
 import com.dallab.cattoy.dto.ProductDto;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,7 +45,7 @@ public class ProductController {
     }
 
     // 인증된 사용자 & 관리자만 접근 가능
-    @PreAuthorize("isAuthenticated() and hasAuthority('ADMIN')")
+    @AuthorizeRequired("ADMIN")
     @PostMapping
     public ResponseEntity<?> create(
             @Valid @RequestBody ProductDto productDto
