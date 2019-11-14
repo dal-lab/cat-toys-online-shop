@@ -5,6 +5,7 @@ import com.dallab.cattoy.domain.ProductRepository;
 import com.dallab.cattoy.dto.ProductDto;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return productRepository.findById(id).get();
+        return productRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     public Product addProduct(Product product) {
@@ -31,7 +33,8 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductDto productDto) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
 
         product.changeWithDto(productDto);
 

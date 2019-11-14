@@ -28,7 +28,7 @@ public class UserService {
 
     public User authenticate(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException());
+                .orElseThrow(EntityNotFoundException::new);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             return null;
