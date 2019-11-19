@@ -1,11 +1,12 @@
 package com.dallab.cattoys.controller;
 
 import com.dallab.cattoys.domain.Product;
+import com.dallab.cattoys.dto.ProductDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -13,16 +14,23 @@ import java.util.List;
 public class ProductController {
 
     @GetMapping
-    public List<Product> list() {
+    public List<ProductDto> list() {
         Product product = Product.builder()
                 .name("쥐돌이")
                 .maker("달랩")
                 .price(6000)
                 .build();
 
-        List<Product> products = Arrays.asList(product);
+        List<ProductDto> productDtos = new ArrayList<>();
+        productDtos.add(
+                ProductDto.builder()
+                        .name(product.getName())
+                        .maker(product.getMaker())
+                        .price(product.getPrice())
+                        .build()
+        );
 
-        return products;
+        return productDtos;
     }
 
 }
