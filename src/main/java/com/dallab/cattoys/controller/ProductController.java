@@ -25,16 +25,18 @@ public class ProductController {
         List<ProductDto> productDtos = new ArrayList<>();
 
         for (Product product : products) {
-            productDtos.add(
-                    ProductDto.builder()
-                            .name(product.getName())
-                            .maker(product.getMaker())
-                            .price(product.getPrice())
-                            .build()
-            );
+            productDtos.add(productToDto(product));
         }
 
         return productDtos;
+    }
+
+    private ProductDto productToDto(Product product) {
+        return ProductDto.builder()
+                .name(product.getName())
+                .maker(product.getMaker())
+                .price(product.getPrice())
+                .build();
     }
 
 }
