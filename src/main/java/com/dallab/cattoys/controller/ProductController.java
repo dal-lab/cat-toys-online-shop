@@ -20,16 +20,6 @@ public class ProductController {
 
     @GetMapping
     public List<ProductDto> list() {
-//        List<Product> products = Arrays.asList(
-//                Product.builder()
-//                        .name("쥐돌이")
-//                        .maker("달랩")
-//                        .price(6000)
-//                        .build()
-//        );
-
-        // 위의 코드를 이렇게 다른 곳으로 옮길 수 있다면?
-        // = Application layer의 객체와 협력해서 이 일을 처리한다면?
         List<Product> products = productService.getProducts();
 
         List<ProductDto> productDtos = new ArrayList<>();
