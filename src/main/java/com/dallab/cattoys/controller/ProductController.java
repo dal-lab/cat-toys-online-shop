@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -22,13 +22,9 @@ public class ProductController {
     public List<ProductDto> list() {
         List<Product> products = productService.getProducts();
 
-        List<ProductDto> productDtos = new ArrayList<>();
-
-        for (Product product : products) {
-            productDtos.add(productToDto(product));
-        }
-
-        return productDtos;
+        return products.stream()
+                .map(product -> productToDto(product))
+                .collect(Collectors.toList());
     }
 
     private ProductDto productToDto(Product product) {
