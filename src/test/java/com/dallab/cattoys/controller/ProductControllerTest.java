@@ -1,8 +1,10 @@
 package com.dallab.cattoys.controller;
 
+import com.dallab.cattoys.application.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,6 +18,9 @@ class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @SpyBean(ProductService.class)
+    private ProductService productService;
 
     @Test
     public void list() throws Exception {
