@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,6 +48,8 @@ class ProductControllerTest {
                 .andExpect(content().string(
                         containsString("\"name\":\"쥐돌이\"")
                 ));
+
+        verify(productService).getProducts();
     }
 
 }
