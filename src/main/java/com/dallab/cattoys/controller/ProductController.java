@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     @GetMapping
-    public void list() {
-        // TODO: 제대로 뭔가 해야 함.
+    public String list() {
+        return "쥐돌이";
     }
 
 }
