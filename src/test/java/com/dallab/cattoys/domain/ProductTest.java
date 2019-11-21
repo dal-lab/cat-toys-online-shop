@@ -15,8 +15,6 @@ class ProductTest {
 
     @BeforeEach
     public void setUp() {
-        product = new Product("쥐돌이", "", 1000);
-
         product = Product.builder()
                 .name("쥐돌이")
                 .maker("달랩")
