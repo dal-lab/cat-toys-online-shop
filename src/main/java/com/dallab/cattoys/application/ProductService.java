@@ -1,24 +1,20 @@
 package com.dallab.cattoys.application;
 
 import com.dallab.cattoys.domain.Product;
+import com.dallab.cattoys.domain.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class ProductService {
 
-    public List<Product> getProducts() {
-        List<Product> products = Arrays.asList(
-                Product.builder()
-                        .name("쥐돌이")
-                        .maker("달랩")
-                        .price(6000)
-                        .build()
-        );
+    private ProductRepository productRepository;
 
-        return products;
+    public List<Product> getProducts() {
+        return productRepository.findAll();
     }
 
 }

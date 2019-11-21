@@ -1,6 +1,7 @@
 package com.dallab.cattoys.application;
 
 import com.dallab.cattoys.domain.Product;
+import com.dallab.cattoys.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +13,13 @@ class ProductServiceTest {
 
     private ProductService productService;
 
+    private ProductRepository productRepository;
+
     @BeforeEach
     public void setUp() {
-        productService = new ProductService();
+        productRepository = new ProductRepository();
+
+        productService = new ProductService(productRepository);
     }
 
     @Test
