@@ -4,19 +4,21 @@ import com.dallab.cattoys.domain.Product;
 import com.dallab.cattoys.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 class ProductServiceTest {
 
     private ProductService productService;
 
-    @Spy
+    @Mock
     private ProductRepository productRepository;
 
     @BeforeEach
@@ -34,7 +36,7 @@ class ProductServiceTest {
                 .price(6000)
                 .build();
 
-        productRepository.save(product);
+        given(productRepository.findAll()).willReturn(Arrays.asList(product));
 
         List<Product> products = productService.getProducts();
 
