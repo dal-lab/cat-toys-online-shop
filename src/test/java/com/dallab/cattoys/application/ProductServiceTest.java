@@ -24,6 +24,14 @@ class ProductServiceTest {
 
     @Test
     public void getProducts() {
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(6000)
+                .build();
+
+        productRepository.save(product);
+
         List<Product> products = productService.getProducts();
 
         assertThat(products).hasSize(1);
