@@ -3,11 +3,10 @@ package com.dallab.cattoys.controller;
 import com.dallab.cattoys.application.ProductService;
 import com.dallab.cattoys.domain.Product;
 import com.dallab.cattoys.dto.ProductDto;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +17,9 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     @Autowired
+    private Mapper mapper;
+
+    @Autowired
     private ProductService productService;
 
     @GetMapping
@@ -25,16 +27,18 @@ public class ProductController {
         List<Product> products = productService.getProducts();
 
         return products.stream()
-                .map(product -> productToDto(product))
+                .map(product -> mapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
     }
 
-    private ProductDto productToDto(Product product) {
-        return ProductDto.builder()
-                .name(product.getName())
-                .maker(product.getMaker())
-                .price(product.getPrice())
-                .build();
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void create(
+            @RequestBody ProductDto productDto
+    ) {
+        Product product = mapper.map(productDto, Product.class);
+
+        productService.addProduct(product);
     }
 
 }

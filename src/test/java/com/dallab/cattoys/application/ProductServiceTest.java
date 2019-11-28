@@ -47,4 +47,17 @@ class ProductServiceTest {
         verify(productRepository).findAll();
     }
 
+    @Test
+    public void addProduct() {
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(6000)
+                .build();
+
+        productService.addProduct(product);
+
+        verify(productRepository).save(product);
+    }
+
 }
