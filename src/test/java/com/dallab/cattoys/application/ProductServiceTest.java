@@ -60,4 +60,11 @@ class ProductServiceTest {
         verify(productRepository).save(product);
     }
 
+    @Test
+    public void deleteProduct() {
+        productService.deleteProduct(13L);
+
+        verify(productRepository).deleteById(13L);
+    }
+
 }

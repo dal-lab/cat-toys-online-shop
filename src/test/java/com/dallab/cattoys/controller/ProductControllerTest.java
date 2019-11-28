@@ -68,4 +68,14 @@ class ProductControllerTest {
         verify(productService).addProduct(any(Product.class));
     }
 
+    @Test
+    public void destroy() throws Exception {
+        mockMvc.perform(
+                delete("/products/1")
+        )
+                .andExpect(status().isOk());
+
+        verify(productService).deleteProduct(1L);
+    }
+
 }
