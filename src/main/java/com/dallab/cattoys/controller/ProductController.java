@@ -31,6 +31,15 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("{id}")
+    public ProductDto detail(
+            @PathVariable Long id
+    ) {
+        Product product = productService.getProduct(id);
+
+        return mapper.map(product, ProductDto.class);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(
@@ -39,6 +48,16 @@ public class ProductController {
         Product product = mapper.map(productDto, Product.class);
 
         productService.addProduct(product);
+    }
+
+    @PatchMapping("{id}")
+    public void update(
+            @PathVariable Long id,
+            @RequestBody ProductDto productDto
+    ) {
+        Product product = mapper.map(productDto, Product.class);
+
+        productService.updateProduct(id, product);
     }
 
     @DeleteMapping("{id}")

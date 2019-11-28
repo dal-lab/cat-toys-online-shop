@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -56,6 +57,26 @@ class ProductControllerTest {
     }
 
     @Test
+    public void detail() throws Exception {
+        Product product = Product.builder()
+                .name("쥐돌이")
+                .maker("달랩")
+                .price(6000)
+                .build();
+
+        given(productService.getProduct(13L)).willReturn(product);
+
+        mockMvc.perform(get("/products/13")
+                // 최신 브라우저는 UTF-8이 기본이지만 MockMvc는 아니라 따로 지정해야 함.
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("쥐돌이")));
+
+        verify(productService).getProduct(13L);
+    }
+
+    @Test
     public void create() throws Exception {
         mockMvc.perform(
                 post("/products")
@@ -66,6 +87,19 @@ class ProductControllerTest {
                 .andExpect(status().isCreated());
 
         verify(productService).addProduct(any(Product.class));
+    }
+
+    @Test
+    public void update() throws Exception {
+        mockMvc.perform(
+                patch("/products/13")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"name\":\"쥐돌이\",\"maker\":\"달랩\"," +
+                                "\"price\":6000}")
+        )
+                .andExpect(status().isOk());
+
+        verify(productService).updateProduct(eq(13L), any(Product.class));
     }
 
     @Test

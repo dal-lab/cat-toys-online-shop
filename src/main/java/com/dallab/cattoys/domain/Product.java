@@ -34,4 +34,10 @@ public class Product {
         return price * quantity - discount;
     }
 
+    public void changeByInformation(Product productInformation) {
+        name = productInformation.name;
+        maker = productInformation.maker;
+        price = productInformation.price;
+    }
+
 }
