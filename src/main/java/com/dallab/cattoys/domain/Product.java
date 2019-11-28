@@ -29,6 +29,9 @@ public class Product {
     @Getter
     private Integer price;
 
+    @Getter
+    private boolean deleted;
+
     public Integer getPrice(int quantity) {
         Integer discount = quantity < 3 ? 0 : 1000;
         return price * quantity - discount;
@@ -38,6 +41,10 @@ public class Product {
         name = productInformation.name;
         maker = productInformation.maker;
         price = productInformation.price;
+    }
+
+    public void delete() {
+        deleted = true;
     }
 
 }

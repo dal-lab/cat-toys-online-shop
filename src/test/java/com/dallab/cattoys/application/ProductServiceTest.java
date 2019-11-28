@@ -2,7 +2,6 @@ package com.dallab.cattoys.application;
 
 import com.dallab.cattoys.domain.Product;
 import com.dallab.cattoys.domain.ProductRepository;
-import org.hibernate.procedure.ProcedureOutputs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -38,7 +37,8 @@ class ProductServiceTest {
                 .price(6000)
                 .build();
 
-        given(productRepository.findAll()).willReturn(Arrays.asList(product));
+        given(productRepository.findAllByDeleted(false))
+                .willReturn(Arrays.asList(product));
 
         List<Product> products = productService.getProducts();
 
@@ -46,7 +46,7 @@ class ProductServiceTest {
 
         assertThat(products.get(0).getName()).isEqualTo("쥐돌이");
 
-        verify(productRepository).findAll();
+        verify(productRepository).findAllByDeleted(false);
     }
 
     @Test
@@ -109,9 +109,16 @@ class ProductServiceTest {
 
     @Test
     public void deleteProduct() {
-        productService.deleteProduct(13L);
+        given(productRepository.findById(13L))
+                .willReturn(Optional.of(
+                        Product.builder().name("쥐돌이").build()
+                ));
 
-        verify(productRepository).deleteById(13L);
+        Product product = productService.deleteProduct(13L);
+
+        verify(productRepository).findById(13L);
+
+        assertThat(product.isDeleted()).isTrue();
     }
 
 }
