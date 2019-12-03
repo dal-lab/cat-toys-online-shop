@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(
-            @RequestBody ProductDto productDto
+            @Valid @RequestBody ProductDto productDto
     ) {
         Product product = mapper.map(productDto, Product.class);
 
@@ -53,7 +54,7 @@ public class ProductController {
     @PatchMapping("{id}")
     public void update(
             @PathVariable Long id,
-            @RequestBody ProductDto productDto
+            @Valid @RequestBody ProductDto productDto
     ) {
         Product product = mapper.map(productDto, Product.class);
 
