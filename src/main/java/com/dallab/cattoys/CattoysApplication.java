@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class CattoysApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CattoysApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CattoysApplication.class, args);
+    }
 
     @Bean
     public Mapper mapper() {
