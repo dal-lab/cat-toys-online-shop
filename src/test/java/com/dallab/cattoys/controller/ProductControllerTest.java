@@ -26,6 +26,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class ProductControllerTest {
 
+    private static final String TESTER_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
+            "eyJ1c2VySWQiOjEzLCJuYW1lIjoi7YWM7Iqk7YSwIn0." +
+            "yI3hxmFPMg4tbbxsUh11AzwfgbfxW_jrUaqFuzPTS64";
+
+    private static final String ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
+            "eyJ1c2VySWQiOjEsIm5hbWUiOiLqtIDrpqzsnpAifQ." +
+            "EyrTP4OAGH9fA7lYxHrmJibf9QpBZnijtet-bWiTu2k";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -94,9 +102,10 @@ class ProductControllerTest {
     }
 
     @Test
-    public void create() throws Exception {
+    public void createWithAdminAuthentication() throws Exception {
         mockMvc.perform(
                 post("/products")
+                        .header("Authorization", "Bearer " + ADMIN_TOKEN)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"name\":\"쥐돌이\",\"maker\":\"달랩\"," +
                                 "\"price\":6000}")
@@ -104,6 +113,29 @@ class ProductControllerTest {
                 .andExpect(status().isCreated());
 
         verify(productService).addProduct(any(Product.class));
+    }
+
+    @Test
+    public void createWithTesterAuthentication() throws Exception {
+        mockMvc.perform(
+                post("/products")
+                        .header("Authorization", "Bearer " + TESTER_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"name\":\"쥐돌이\",\"maker\":\"달랩\"," +
+                                "\"price\":6000}")
+        )
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void createWithoutAuthentication() throws Exception {
+        mockMvc.perform(
+                post("/products")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"name\":\"쥐돌이\",\"maker\":\"달랩\"," +
+                                "\"price\":6000}")
+        )
+                .andExpect(status().isUnauthorized());
     }
 
     @Test

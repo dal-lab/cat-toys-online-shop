@@ -6,6 +6,8 @@ import com.dallab.cattoys.dto.ProductDto;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,7 +45,9 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("isAuthenticated() and hasAuthority('ADMIN')")
     public void create(
+            Authentication authentication,
             @Valid @RequestBody ProductDto productDto
     ) {
         Product product = mapper.map(productDto, Product.class);
