@@ -3,8 +3,8 @@ package com.dallab.cattoy.domain;
 import com.dallab.cattoy.dto.ProductDto;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +12,7 @@ public class ProductTest {
 
     private Product product;
 
-    @Before
+    @BeforeEach
     public void initProduct() {
         product = Product.builder()
                 .name("쥐돌이x")

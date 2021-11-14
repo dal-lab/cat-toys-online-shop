@@ -1,7 +1,8 @@
 package com.dallab.cattoy.application;
 
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,7 +10,7 @@ public class GreetingServiceTest {
 
     private GreetingService greetingService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         greetingService = new GreetingService();
     }

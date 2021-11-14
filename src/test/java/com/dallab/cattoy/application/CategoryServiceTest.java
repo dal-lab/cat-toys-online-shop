@@ -3,8 +3,8 @@ package com.dallab.cattoy.application;
 import com.dallab.cattoy.domain.Category;
 import com.dallab.cattoy.domain.CategoryRepository;
 import com.dallab.cattoy.dto.CategoryDto;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -25,14 +25,14 @@ public class CategoryServiceTest {
 
     private Category mockCategory;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         categoryService = new CategoryService(categoryRepository);
     }
 
-    @Before
+    @BeforeEach
     public void initMockCategory() {
         mockCategory = Category.builder()
                 .id(13L)

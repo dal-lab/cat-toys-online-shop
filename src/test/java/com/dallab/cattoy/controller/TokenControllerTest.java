@@ -2,15 +2,13 @@ package com.dallab.cattoy.controller;
 
 import com.dallab.cattoy.application.UserService;
 import com.dallab.cattoy.domain.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -20,7 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(TokenController.class)
 @ActiveProfiles("test")
 public class TokenControllerTest {
@@ -31,7 +28,7 @@ public class TokenControllerTest {
     @MockBean
     private UserService userService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         User user = User.builder()
                 .name("테스터")
@@ -48,11 +45,11 @@ public class TokenControllerTest {
     @Test
     public void signinWithValidAttributes() throws Exception {
         mockMvc.perform(
-                post("/token")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"tester@example.com\"," +
-                                "\"password\":\"pass\"}")
-        )
+                        post("/token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"email\":\"tester@example.com\"," +
+                                        "\"password\":\"pass\"}")
+                )
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("accessToken")))
                 .andExpect(content().string(containsString(".")));
@@ -63,11 +60,11 @@ public class TokenControllerTest {
     @Test
     public void signinWithInvalidAttributes() throws Exception {
         mockMvc.perform(
-                post("/token")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"x@example.com\"," +
-                                "\"password\":\"x\"}")
-        )
+                        post("/token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"email\":\"x@example.com\"," +
+                                        "\"password\":\"x\"}")
+                )
                 .andExpect(status().isNotFound());
 
         verify(userService).authenticate("x@example.com", "x");
@@ -76,10 +73,10 @@ public class TokenControllerTest {
     @Test
     public void signinWithNoPassword() throws Exception {
         mockMvc.perform(
-                post("/token")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}")
-        )
+                        post("/token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}")
+                )
                 .andExpect(status().isBadRequest());
     }
 

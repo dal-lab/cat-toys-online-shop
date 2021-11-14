@@ -3,8 +3,8 @@ package com.dallab.cattoy.application;
 import com.dallab.cattoy.domain.Product;
 import com.dallab.cattoy.domain.ProductRepository;
 import com.dallab.cattoy.dto.ProductDto;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -24,7 +24,7 @@ public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 

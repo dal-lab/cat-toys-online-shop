@@ -3,8 +3,8 @@ package com.dallab.cattoy.application;
 
 import com.dallab.cattoy.domain.User;
 import com.dallab.cattoy.domain.UserRepository;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -26,7 +27,7 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
@@ -35,7 +36,7 @@ public class UserServiceTest {
         userService = new UserService(userRepository, passwordEncoder);
     }
 
-    @Before
+    @BeforeEach
     public void mockUserRepository() {
         User user = User.builder()
                 .name("테스터")
@@ -69,12 +70,14 @@ public class UserServiceTest {
         assertThat(user).isNotNull();
     }
 
-    @Test(expected = EntityNotFoundException.class)
+    @Test
     public void authenticateWithNotExistedEmail() {
         given(userRepository.findByEmail("x@example.com"))
                 .willThrow(new EntityNotFoundException());
 
-        userService.authenticate("x@example.com", "x");
+        assertThrows(EntityNotFoundException.class, () -> {
+            userService.authenticate("x@example.com", "x");
+        });
     }
 
     @Test

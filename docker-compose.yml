@@ -11,7 +11,7 @@ services:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
   api:
-    image: openjdk:8
+    image: openjdk:11
     env_file: .env
     volumes:
       - .:/home/project
